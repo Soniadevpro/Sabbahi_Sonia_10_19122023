@@ -13,20 +13,19 @@ const EventList = () => {
   const { data, error } = useData();
   const [type, setType] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-  const filteredEvents = (
-    (!type
-      ? data?.events
-      : data?.events) || []
-  ).filter((event, index) => {
-    if (
-      (currentPage - 1) * PER_PAGE <= index &&
-      PER_PAGE * currentPage > index
-    ) {
-      return true;
+
+  const filteredEvents = data?.events.filter((event, index) => {
+    console.log("Filtered events count:", filteredEvents.length);
+    // Filtrer d'abord par type, si un type est sélectionné
+    if (type && event.type.toLowerCase().trim() !== type.toLowerCase().trim()) {
+      return false;
     }
-    return false;
+
+    // application de la pagination
+    return (currentPage - 1) * PER_PAGE <= index && index < currentPage * PER_PAGE;
   });
   const changeType = (evtType) => {
+    // console.log("EventList received type:", evtType);
     setCurrentPage(1);
     setType(evtType);
   };
@@ -40,22 +39,11 @@ const EventList = () => {
       ) : (
         <>
           <h3 className="SelectTitle">Catégories</h3>
-          <Select
-            selection={Array.from(typeList)}
-            onChange={(value) => (value ? changeType(value) : changeType(null))}
-          />
+          <Select selection={Array.from(typeList)} onChange={(value) => (value ? changeType(value) : changeType(null))} />
           <div id="events" className="ListContainer">
             {filteredEvents.map((event) => (
               <Modal key={event.id} Content={<ModalEvent event={event} />}>
-                {({ setIsOpened }) => (
-                  <EventCard
-                    onClick={() => setIsOpened(true)}
-                    imageSrc={event.cover}
-                    title={event.title}
-                    date={new Date(event.date)}
-                    label={event.type}
-                  />
-                )}
+                {({ setIsOpened }) => <EventCard onClick={() => setIsOpened(true)} imageSrc={event.cover} title={event.title} date={new Date(event.date)} label={event.type} />}
               </Modal>
             ))}
           </div>
