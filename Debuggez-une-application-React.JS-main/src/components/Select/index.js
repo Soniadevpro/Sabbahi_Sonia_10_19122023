@@ -6,12 +6,10 @@ import PropTypes from "prop-types";
 import "./style.scss";
 
 const Select = ({ selection, onChange, name, titleEmpty, label, type = "normal" }) => {
-  const [value, setValue] = useState(null); /* ajout de l'argument NULL */
+  const [value, setValue] = useState(null);
   const [collapsed, setCollapsed] = useState(true);
   const changeValue = (newValue) => {
-    // console.log("Select changing to:", newValue);
     onChange(newValue);
-    /* ajout de l'argument newValue à la fonction onChange */
     setValue(newValue);
     setCollapsed(!collapsed);
   };

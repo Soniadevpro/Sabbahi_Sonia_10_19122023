@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import EventCard from "../../components/EventCard";
 import Select from "../../components/Select";
 import { useData } from "../../contexts/DataContext";
@@ -14,23 +14,21 @@ const EventList = () => {
   const [type, setType] = useState();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredEvents = data?.events.filter((event, index) => {
-    console.log("Filtered events count:", filteredEvents.length);
-    // Filtrer d'abord par type, si un type est sélectionné
-    if (type && event.type.toLowerCase().trim() !== type.toLowerCase().trim()) {
-      return false;
-    }
+  // Filtre les événements en fonction du type sélectionné
+  const filteredEvents = (type ? data?.events.filter((event) => event.type === type) : data?.events) || [];
 
-    // application de la pagination
-    return (currentPage - 1) * PER_PAGE <= index && index < currentPage * PER_PAGE;
-  });
+  // Applique la pagination sur les événements filtrés
+  const paginatedEvents = filteredEvents.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+
+  const pageNumber = Math.ceil(filteredEvents.length / PER_PAGE);
+
   const changeType = (evtType) => {
-    // console.log("EventList received type:", evtType);
     setCurrentPage(1);
     setType(evtType);
   };
-  const pageNumber = Math.floor((filteredEvents?.length || 0) / PER_PAGE) + 1;
+
   const typeList = new Set(data?.events.map((event) => event.type));
+
   return (
     <>
       {error && <div>An error occured</div>}
@@ -41,7 +39,7 @@ const EventList = () => {
           <h3 className="SelectTitle">Catégories</h3>
           <Select selection={Array.from(typeList)} onChange={(value) => (value ? changeType(value) : changeType(null))} />
           <div id="events" className="ListContainer">
-            {filteredEvents.map((event) => (
+            {paginatedEvents.map((event) => (
               <Modal key={event.id} Content={<ModalEvent event={event} />}>
                 {({ setIsOpened }) => <EventCard onClick={() => setIsOpened(true)} imageSrc={event.cover} title={event.title} date={new Date(event.date)} label={event.type} />}
               </Modal>

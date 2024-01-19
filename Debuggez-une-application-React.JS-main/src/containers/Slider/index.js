@@ -14,9 +14,16 @@ const Slider = () => {
   const nextCard = () => {
     setTimeout(() => setIndex(index < imgSlide - 1 ? index + 1 : 0), 5000);
   };
+
   useEffect(() => {
     nextCard();
   });
+
+  // Fonction pour gérer le clic sur les boutons de pagination
+  const handlePaginationClick = (radioIdx) => {
+    setIndex(radioIdx);
+  };
+
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
@@ -35,7 +42,14 @@ const Slider = () => {
       <div className="SlideCard__paginationContainer">
         <div className="SlideCard__pagination">
           {byDateDesc?.map((focus, radioIdx) => (
-            <input key={focus.title} type="radio" name="radio-button" checked={index === radioIdx} readOnly />
+            <input
+              key={focus.title}
+              type="radio"
+              name="radio-button"
+              checked={index === radioIdx}
+              readOnly
+              onClick={() => handlePaginationClick(radioIdx)} // Ajout du gestionnaire d'événements onClick
+            />
           ))}
         </div>
       </div>
