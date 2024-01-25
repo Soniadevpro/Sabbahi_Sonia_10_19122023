@@ -7,12 +7,13 @@ import "./style.scss";
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
-  const byDateDesc = data?.focus.sort((evtA, evtB) => (new Date(evtA.date) < new Date(evtB.date) ? 1 : -1));
-
-  const imgSlide = data?.focus?.length;
+  const byDateDesc = data?.focus.sort((evtA, evtB) => (new Date(evtA.date) < new Date(evtB.date) ? -1 : 1));
 
   const nextCard = () => {
-    setTimeout(() => setIndex(index < imgSlide - 1 ? index + 1 : 0), 5000);
+    // verif si bydatedesc est défini avant d'accéder a length
+    if (byDateDesc && byDateDesc.length) {
+      setTimeout(() => setIndex(index < byDateDesc.length - 1 ? index + 1 : 0), 5000);
+    }
   };
 
   useEffect(() => {
