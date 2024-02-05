@@ -14,7 +14,7 @@ import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
   const dataContext = useData();
-  const { last } = dataContext;
+  const { last } = dataContext; // récupération des données de last (pour qu'il soit bien défini dans Page et non undefined)
 
   return (
     <>

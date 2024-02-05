@@ -20,9 +20,9 @@ export const DataProvider = ({ children }) => {
       setError(err);
     }
   }, []);
-  const events = data?.events;
-  const eventsSort = events?.sort((evtA, evtB) => (new Date(evtA.date) > new Date(evtB.date) ? -1 : 1));
-  const last = eventsSort?.[0];
+  const events = data?.events; // extraire la liste des événements de data. Si data ? alors events existe sinon undefined
+  const eventsSort = events?.sort((evtA, evtB) => (new Date(evtA.date) > new Date(evtB.date) ? -1 : 1)); // Si events? alors on tri (sort) fonction si evtA est plus récent que evtB retourne -1 SINON (:) retourne 1 (evtB avant evA)
+  const last = eventsSort?.[0]; // Si eventsSort ? alors on récupère le [0] (celui qui sera affiché et donc le plus récent)
   useEffect(() => {
     if (data) return;
     getData();

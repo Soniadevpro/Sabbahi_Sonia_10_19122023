@@ -5,32 +5,29 @@ import "./style.scss";
 export const FIELD_TYPES = {
   INPUT_TEXT: 1,
   TEXTAREA: 2,
-  EMAIL: 3,
+  // première solution était de rajouter ici le mail en 3 (finalement choisi ajout de prop)
 };
 
-const Field = ({ type = FIELD_TYPES.INPUT_TEXT, label, name, placeholder }) => {
+const Field = ({ type = FIELD_TYPES.INPUT_TEXT, label, name, placeholder, fieldMail }) => {
+  // ajout de prop pour le champ du mail
   let component;
   switch (type) {
     case FIELD_TYPES.INPUT_TEXT:
-      component = <input type="text" name={name} placeholder={placeholder} data-testid="field-testid" required />;
+      component = <input type={fieldMail} required name={name} placeholder={placeholder} data-testid="field-testid" />;
       break;
     case FIELD_TYPES.TEXTAREA:
-      component = <textarea name={name} data-testid="field-testid" placeholder={placeholder} required />;
+      component = <textarea name={name} required data-testid="field-testid" placeholder={placeholder} />;
       break;
-    case FIELD_TYPES.EMAIL:
+    default:
       component = (
         <input
-          type="email"
+          type="text"
+          required // rajout de required
           name={name}
           placeholder={placeholder}
           data-testid="field-testid"
-          pattern="^(http(s){0,1}:\/\/.){0,1}[\-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([\-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)$"
-          required
         />
       );
-      break;
-    default:
-      component = <input type="text" name={name} placeholder={placeholder} data-testid="field-testid" required />;
   }
   return (
     <div className="inputField">
@@ -45,12 +42,14 @@ Field.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
+  fieldMail: PropTypes.string, // rajout de la prop verif type
 };
 Field.defaultProps = {
   label: "",
   placeholder: "",
   type: FIELD_TYPES.INPUT_TEXT,
   name: "field-name",
+  fieldMail: "", // rajout prop par default
 };
 
 export default Field;

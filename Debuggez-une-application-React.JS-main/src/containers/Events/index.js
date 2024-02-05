@@ -18,7 +18,7 @@ const EventList = () => {
   const filteredEvents = (type ? data?.events.filter((event) => event.type === type) : data?.events) || [];
 
   // Applique la pagination sur les événements filtrés
-  const paginatedEvents = filteredEvents.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+  const paginationEvents = filteredEvents.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
 
   const pageNumber = Math.ceil(filteredEvents.length / PER_PAGE);
 
@@ -39,7 +39,7 @@ const EventList = () => {
           <h3 className="SelectTitle">Catégories</h3>
           <Select selection={Array.from(typeList)} onChange={(value) => (value ? changeType(value) : changeType(null))} />
           <div id="events" className="ListContainer">
-            {paginatedEvents.map((event) => (
+            {paginationEvents.map((event) => (
               <Modal key={event.id} Content={<ModalEvent event={event} />}>
                 {({ setIsOpened }) => <EventCard onClick={() => setIsOpened(true)} imageSrc={event.cover} title={event.title} date={new Date(event.date)} label={event.type} />}
               </Modal>
